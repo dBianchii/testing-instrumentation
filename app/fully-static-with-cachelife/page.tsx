@@ -1,15 +1,20 @@
 import { cacheLife } from "next/cache";
+import { Suspense } from "react";
 
-const getData = async () => {
+
+const getData = () => {
 	return Math.random();
 }
 
-export default async function Page() {
+const InnerComponent = async () => {
 	"use cache";
 	cacheLife("seconds")
+	const data = getData();
+	return <p>Random number: {data}</p>
+}
 
-	const data = await getData();
-	return <div>
-		<p>Random number: {data}</p>
-	</div>;
+export default function Page() {
+	return <Suspense>
+		<InnerComponent />
+	</Suspense>;
 }
